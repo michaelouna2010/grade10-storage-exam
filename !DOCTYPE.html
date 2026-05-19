@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 10 Storage Exam Portal</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-indigo-600 text-white p-2 rounded-lg">
+          <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 text-lg leading-tight">Grade 10 Computer Studies</h1>
+          <p class="text-xs text-indigo-600 font-semibold tracking-wider uppercase">Storage & Devices Exam</p>
+        </div>
+      </div>
+      <div id="header-status" class="flex items-center space-x-4">
+        <span id="system-status-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+          <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          Initializing...
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-center">
+
+    <!-- 1. ROLE SELECTION SCREEN -->
+    <div id="screen-welcome" class="max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-slate-900">Welcome to the Exam Portal</h2>
+        <p class="text-slate-500 mt-2 text-sm">Please select your role to continue.</p>
+      </div>
+      
+      <div class="space-y-4">
+        <button onclick="switchScreen('screen-student-login')" class="w-full flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/50 transition-all text-left group">
+          <div class="flex items-center space-x-4">
+            <div class="p-3 bg-indigo-100 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <i data-lucide="user" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800">I am a Student</p>
+              <p class="text-xs text-slate-500">Take the exam using your Admission Number</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
+        </button>
+
+        <button onclick="switchScreen('screen-teacher-login')" class="w-full flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:border-violet-500 hover:bg-violet-50/50 transition-all text-left group">
+          <div class="flex items-center space-x-4">
+            <div class="p-3 bg-violet-100 text-violet-600 rounded-lg group-hover:bg-violet-600 group-hover:text-white transition-colors">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-800">I am the Teacher</p>
+              <p class="text-xs text-slate-500">View dashboard, submissions, and grade papers</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-violet-600 transition-colors"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. STUDENT LOGIN SCREEN (NO EMAIL) -->
+    <div id="screen-student-login" class="hidden max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+      <button onclick="switchScreen('screen-welcome')" class="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6">
+        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back
+      </button>
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-bold text-slate-900">Student Sign-In</h2>
+        <p class="text-slate-500 text-xs mt-1">No email needed. Just enter your name and admission number.</p>
+      </div>
+      
+      <form id="student-login-form" onsubmit="handleStudentLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+          <input type="text" id="student-name" required placeholder="e.g. John Doe" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Admission Number</label>
+          <input type="text" id="student-adm" required placeholder="e.g. 4512" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg text-sm transition-colors shadow-sm">
+          Start Exam
+        </button>
+      </form>
+    </div>
+
+    <!-- 3. TEACHER LOGIN SCREEN -->
+    <div id="screen-teacher-login" class="hidden max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+      <button onclick="switchScreen('screen-welcome')" class="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6">
+        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back
+      </button>
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-bold text-slate-900">Teacher Login</h2>
+        <p class="text-slate-500 text-xs mt-1">Enter your password to access analytics & grading.</p>
+      </div>
+      
+      <form id="teacher-login-form" onsubmit="handleTeacherLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Secret Password</label>
+          <input type="password" id="teacher-pass" required placeholder="Enter password (default: admin123)" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-lg text-sm transition-colors shadow-sm">
+          Enter Dashboard
+        </button>
+      </form>
+    </div>
+
+    <!-- 4. ACTIVE EXAM SCREEN -->
+    <div id="screen-exam" class="hidden max-w-4xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <!-- Left Hand Side: Exam Information, Time, Progress -->
+      <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:sticky lg:top-24 space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Grade 10 Storage Exam</h2>
+          <div class="flex items-center space-x-2 mt-2 text-xs text-slate-500">
+            <span id="display-student-name" class="font-medium text-slate-700">John Doe</span>
+            <span>•</span>
+            <span id="display-student-adm">ADM: 4512</span>
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 flex items-center space-x-3 text-amber-900">
+          <i data-lucide="timer" class="w-6 h-6 text-amber-600 animate-pulse"></i>
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-amber-700">Time Remaining</p>
+            <p id="exam-timer" class="text-2xl font-black font-mono">60:00</p>
+          </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs font-semibold text-slate-600">
+            <span>Questions Answered</span>
+            <span id="answered-fraction">0 / 8</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2">
+            <div id="exam-progress" class="bg-indigo-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <button onclick="confirmSubmitExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm transition-colors shadow-sm flex items-center justify-center space-x-2">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Submit Exam Paper</span>
+        </button>
+      </div>
+
+      <!-- Right Hand Side: Scrollable Exam Questions -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-xs text-indigo-800 leading-relaxed">
+          <span class="font-bold">Exam Instructions:</span> Please write comprehensive, detailed answers to each structured question below. Be clear and highly detailed to maximize your chances of scoring full marks. Avoid leaving any empty blanks.
+        </div>
+
+        <div id="questions-container" class="space-y-6">
+          <!-- Dynamic Questions injection point -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. SUCCESSFUL SUBMISSION SCREEN -->
+    <div id="screen-success" class="hidden max-w-md w-full mx-auto text-center bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-slate-900">Exam Submitted Successfully!</h2>
+      <p class="text-slate-500 mt-2 text-sm">Well done on completing your assessment. Your response has been securely synchronized with the teacher's grading system.</p>
+      
+      <div class="my-6 p-4 bg-slate-50 border border-slate-200 rounded-xl inline-block text-left w-full space-y-2 text-xs text-slate-600">
+        <p><strong>Candidate:</strong> <span id="success-name">John Doe</span></p>
+        <p><strong>Adm Number:</strong> <span id="success-adm">4512</span></p>
+        <p><strong>Receipt Code:</strong> <span id="success-hash" class="font-mono text-indigo-600">N/A</span></p>
+      </div>
+
+      <button onclick="location.reload()" class="w-full bg-slate-800 hover:bg-slate-950 text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+        Return to Welcome
+      </button>
+    </div>
+
+    <!-- 6. TEACHER DASHBOARD SCREEN -->
+    <div id="screen-teacher-dashboard" class="hidden w-full max-w-7xl mx-auto space-y-8">
+      
+      <!-- Top Overview Bar -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Teacher Management Hub</h2>
+          <p class="text-slate-500 text-sm">Manage submissions, apply automated AI grading, and review class data.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="exportScoresToCSV()" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 font-semibold px-4 py-2.5 rounded-lg text-sm flex items-center space-x-2 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export Grades (CSV)</span>
+          </button>
+          <button onclick="logOut()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-sm flex items-center space-x-2 transition-all">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="users" class="w-6 h-6"></i></div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold uppercase">Total Submitted</p>
+            <p id="stat-total" class="text-2xl font-bold text-slate-900">0</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><i data-lucide="pie-chart" class="w-6 h-6"></i></div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold uppercase">Average Score</p>
+            <p id="stat-average" class="text-2xl font-bold text-slate-900">0.0 / 34</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><i data-lucide="award" class="w-6 h-6"></i></div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold uppercase">Highest Mark</p>
+            <p id="stat-highest" class="text-2xl font-bold text-slate-900">0 / 34</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i data-lucide="check-square" class="w-6 h-6"></i></div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold uppercase">Needs Grading</p>
+            <p id="stat-pending" class="text-2xl font-bold text-slate-900">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout: Submission List and Selection Viewer -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Side: List of Submissions (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Submissions</h3>
+            <span class="text-xs text-slate-500" id="submission-count">0 papers loaded</span>
+          </div>
+          <div id="submissions-list" class="divide-y divide-slate-100 max-h-[600px] overflow-y-auto min-h-[300px]">
+            <!-- Dynamic Submissions list injections -->
+            <div class="p-8 text-center text-slate-400">
+              <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+              <p class="text-xs">No papers submitted yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Detailed Student Paper & AI Grading Engine (7 cols) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[500px] flex flex-col">
+          <div id="grading-pane-empty" class="flex-grow flex flex-col items-center justify-center p-12 text-center text-slate-400">
+            <i data-lucide="file-text" class="w-16 h-16 mb-4 text-slate-200"></i>
+            <h3 class="font-bold text-slate-700 text-lg">No Student Paper Selected</h3>
+            <p class="text-sm mt-1 max-w-sm">Select a student from the submissions list on the left to review, auto-grade, or manually modify their answers.</p>
+          </div>
+
+          <div id="grading-pane-active" class="hidden flex-col h-[700px]">
+            <!-- Header bar with operations -->
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h3 class="font-bold text-slate-855 text-base" id="active-student-title">Student Name</h3>
+                <p class="text-xs text-slate-500" id="active-student-meta">ADM: 4512 | Submitted: Just now</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button onclick="triggerAIGrading()" id="ai-grade-btn" class="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs flex items-center space-x-1.5 shadow-sm transition-all">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span>AI Auto-Grade Paper</span>
+                </button>
+                <button onclick="saveManualGrades()" class="bg-slate-800 hover:bg-slate-950 text-white font-semibold px-4 py-2 rounded-lg text-xs flex items-center space-x-1.5 transition-all">
+                  <i data-lucide="save" class="w-4 h-4"></i>
+                  <span>Save Grade</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrollable Content details -->
+            <div class="flex-grow overflow-y-auto p-6 space-y-8" id="grading-questions-list">
+              <!-- Dynamically populated per question with answers & grading box -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODALS -->
+  <!-- Confirmation Dialog -->
+  <div id="modal-confirm" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 transform scale-95 transition-all">
+      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900">Are you absolutely sure?</h3>
+      <p class="text-slate-500 text-sm mt-2">You are about to finalize and submit your exam. Make sure you have answered all questions to the best of your ability. This action cannot be undone.</p>
+      
+      <div class="mt-6 flex justify-end space-x-3">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-950">Cancel</button>
+        <button onclick="submitStudentExam()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-sm">Yes, Submit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay for AI Grading -->
+  <div id="ai-loading-overlay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex flex-col items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-sm text-center flex flex-col items-center space-y-4">
+      <div class="relative w-20 h-20">
+        <!-- Floating dots/waves to symbolize thinking/generation -->
+        <span class="absolute inset-0 rounded-full border-4 border-slate-100 border-t-violet-600 animate-spin"></span>
+        <div class="absolute inset-2 bg-violet-50 rounded-full flex items-center justify-center text-violet-600">
+          <i data-lucide="brain" class="w-8 h-8 animate-pulse"></i>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-bold text-slate-900">AI Grading Engine Active</h4>
+        <p class="text-slate-500 text-xs mt-2 leading-relaxed">Evaluating responses against the official syllabus marking scheme. Assigning accurate criteria weights and generating qualitative student feedback...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE SCRIPTS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDocs, collection, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // ----------------------------------------------------
+    // EXAM DATA DEFINITION (8 Items matching structured questions)
+    // ----------------------------------------------------
+    const examQuestions = [
+      {
+        id: "q1_a",
+        label: "Question 1 (a)",
+        question: "Define primary storage as used in computer memory and storage.",
+        maxScore: 2,
+        placeholder: "Type your definition of Primary Storage here..."
+      },
+      {
+        id: "q1_b",
+        label: "Question 1 (b)",
+        question: "Define secondary storage as used in computer memory and storage.",
+        maxScore: 2,
+        placeholder: "Type your definition of Secondary Storage here..."
+      },
+      {
+        id: "q2_a",
+        label: "Question 2 (a)",
+        question: "Differentiate between volatile and non-volatile memory.",
+        maxScore: 2,
+        placeholder: "Type your explanation of the difference here..."
+      },
+      {
+        id: "q2_b",
+        label: "Question 2 (b)",
+        question: "Give ONE example of volatile memory and ONE example of non-volatile primary memory.",
+        maxScore: 2,
+        placeholder: "Volatile example: \nNon-volatile primary example: "
+      },
+      {
+        id: "q3",
+        label: "Question 3",
+        question: "State THREE main differences between Random Access Memory (RAM) and Read-Only Memory (ROM).",
+        maxScore: 6,
+        placeholder: "RAM vs ROM Difference 1:\nRAM vs ROM Difference 2:\nRAM vs ROM Difference 3:"
+      },
+      {
+        id: "q4",
+        label: "Question 4",
+        question: "Identify the THREE main physical categories of secondary storage media based on how data is stored and read, and provide ONE example of a storage device for each category.",
+        maxScore: 6,
+        placeholder: "Category 1 & Example:\nCategory 2 & Example:\nCategory 3 & Example:"
+      },
+      {
+        id: "q5",
+        label: "Question 5",
+        question: "Name THREE variations (types) of Read-Only Memory (ROM).",
+        maxScore: 3,
+        placeholder: "Type 1:\nType 2:\nType 3:"
+      },
+      {
+        id: "q6",
+        label: "Question 6",
+        question: "A school administrator wants to back up the entire student database, which is currently running in the computer's main memory. Give THREE reasons why secondary storage is preferred over primary storage for this long-term backup task.",
+        maxScore: 3,
+        placeholder: "Reason 1:\nReason 2:\nReason 3:"
+      },
+      {
+        id: "q7",
+        label: "Question 7",
+        question: "John has a 15 GB high-definition video file to transfer from the school's desktop to his laptop. \n(a) Suggest the most appropriate portable secondary storage device.\n(b) Give TWO reasons to justify your choice.\n(c) Why would a standard CD-ROM NOT be suitable?",
+        maxScore: 4,
+        placeholder: "a) Device:\nb) Reason 1:\n   Reason 2:\nc) Why CD-ROM is unsuitable:"
+      },
+      {
+        id: "q8",
+        label: "Question 8",
+        question: "State FOUR factors one should consider when selecting an input or output device for a computer system.",
+        maxScore: 4,
+        placeholder: "Factor 1:\nFactor 2:\nFactor 3:\nFactor 4:"
+      }
+    ];
+
+    const examMarkingScheme = {
+      "q1_a": "Primary Storage: Directly accessible by CPU. Holds active program instructions. Max marks: 2.",
+      "q1_b": "Secondary Storage: Non-volatile, used for backing storage and long-term files. Max marks: 2.",
+      "q2_a": "Volatile vs Non-Volatile: Volatile content is lost when power goes out. Non-volatile holds content indefinitely. Max 2.",
+      "q2_b": "Volatile: RAM. Non-volatile primary: ROM. Max marks: 2.",
+      "q3": "RAM vs ROM differences (volatility, read/write vs read-only, application scope). Max marks: 6.",
+      "q4": "Secondary classes: Magnetic (HDD), Optical (DVD), Solid State (SSD/USB). Max marks: 6.",
+      "q5": "ROM types: PROM, EPROM, EEPROM. Max marks: 3.",
+      "q6": "Backup factors: Non-volatile, larger capacities, cost efficiency per GB, transportable. Max marks: 3.",
+      "q7": "Scenario transfer: (a) Flash Drive/External SSD, (b) High capacity & physical durability, (c) 700MB CD capacity too small. Max 4.",
+      "q8": "Selection factors: Price/affordability, performance speed, compatibility, environment, special needs/handicap access. Max 4."
+    };
+
+    // ----------------------------------------------------
+    // SAFE FIREBASE PARSING (PREVENTS CRASHES OUTSIDE SYSTEM)
+    // ----------------------------------------------------
+    let firebaseConfig = null;
+    let appId = 'grade10-storage-assessment';
+
+    try {
+      if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+        firebaseConfig = JSON.parse(__firebase_config);
+      }
+      if (typeof __app_id !== 'undefined' && __app_id) {
+        appId = __app_id;
+      }
+    } catch (e) {
+      console.warn("Dynamic config parsing failed. Utilizing local backup schema.");
+    }
+
+    let app, auth, db;
+    let databaseActive = false;
+
+    // Global App State variables
+    let currentUser = null;
+    let activeStudent = null;
+    let examTimerInterval = null;
+    let secondsLeft = 3600; // 1 hour
+    let studentAnswers = {};
+    let allSubmissions = [];
+    let selectedSubmissionId = null;
+
+    // ----------------------------------------------------
+    // BOOTSTRAP APP & LOAD EVENTS
+    // ----------------------------------------------------
+    window.addEventListener("DOMContentLoaded", async () => {
+      lucide.createIcons();
+      buildExamQuestions();
+      
+      // Initialize systems safely
+      if (firebaseConfig) {
+        try {
+          app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+
+          // Authenticate
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+
+          onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+              databaseActive = true;
+              updateStatusBadge(true);
+              bindSubmissionsListener();
+            }
+          });
+        } catch (err) {
+          console.error("Database initializing failed. Falling back to Local Mode.", err);
+          setupOfflineBackup();
+        }
+      } else {
+        setupOfflineBackup();
+      }
+    });
+
+    function setupOfflineBackup() {
+      databaseActive = false;
+      updateStatusBadge(false);
+      
+      const saved = localStorage.getItem("local_submissions");
+      if (saved) {
+        allSubmissions = JSON.parse(saved);
+      } else {
+        allSubmissions = [];
+      }
+      rebuildMetrics();
+      rebuildSubmissionsList();
+    }
+
+    function updateStatusBadge(online) {
+      const badge = document.getElementById("system-status-badge");
+      if (online) {
+        badge.className = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Cloud Sync Active`;
+      } else {
+        badge.className = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-rose-500 animate-pulse"></span>Local Sandbox Mode`;
+      }
+    }
+
+    // ----------------------------------------------------
+    // EXAM DOM GENERATION
+    // ----------------------------------------------------
+    function buildExamQuestions() {
+      const container = document.getElementById("questions-container");
+      container.innerHTML = "";
+      
+      examQuestions.forEach((q, idx) => {
+        const div = document.createElement("div");
+        div.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4";
+        div.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">${q.label}</span>
+            <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full">${q.maxScore} Marks</span>
+          </div>
+          <p class="font-semibold text-slate-900 leading-relaxed text-sm">${q.question}</p>
+          <textarea 
+            id="ans-${q.id}" 
+            oninput="handleAnswerInput('${q.id}')"
+            placeholder="${q.placeholder}" 
+            rows="4" 
+            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
+          ></textarea>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Progress updates
+    window.handleAnswerInput = function(qId) {
+      const val = document.getElementById(`ans-${qId}`).value.trim();
+      if (val) {
+        studentAnswers[qId] = val;
+      } else {
+        delete studentAnswers[qId];
+      }
+      updateExamProgress();
+    };
+
+    function updateExamProgress() {
+      const answeredCount = Object.keys(studentAnswers).length;
+      const totalCount = examQuestions.length;
+      document.getElementById("answered-fraction").innerText = `${answeredCount} / ${totalCount}`;
+      const percentage = (answeredCount / totalCount) * 100;
+      document.getElementById("exam-progress").style.width = `${percentage}%`;
+    }
+
+    // ----------------------------------------------------
+    // NAVIGATION HELPER
+    // ----------------------------------------------------
+    window.switchScreen = function(screenId) {
+      const screens = ['screen-welcome', 'screen-student-login', 'screen-teacher-login', 'screen-exam', 'screen-success', 'screen-teacher-dashboard'];
+      screens.forEach(s => {
+        const elem = document.getElementById(s);
+        if (elem) elem.classList.add("hidden");
+      });
+      const activeElem = document.getElementById(screenId);
+      if (activeElem) activeElem.classList.remove("hidden");
+    };
+
+    // ----------------------------------------------------
+    // USER ACTIONS & LOGIN LOGIC
+    // ----------------------------------------------------
+    
+    // Login: Student
+    window.handleStudentLogin = function(e) {
+      e.preventDefault();
+      const name = document.getElementById("student-name").value.trim();
+      const adm = document.getElementById("student-adm").value.trim();
+      
+      if (!name || !adm) return;
+
+      activeStudent = { name, adm, id: `${adm}_${Date.now()}` };
+      
+      document.getElementById("display-student-name").innerText = name;
+      document.getElementById("display-student-adm").innerText = `ADM: ${adm}`;
+      
+      // Start Exam and countdown
+      studentAnswers = {};
+      secondsLeft = 3600; 
+      updateExamProgress();
+      switchScreen('screen-exam');
+      startTimer();
+    };
+
+    // Login: Teacher
+    window.handleTeacherLogin = function(e) {
+      e.preventDefault();
+      const pass = document.getElementById("teacher-pass").value.trim();
+      
+      if (pass === "admin123") {
+        switchScreen('screen-teacher-dashboard');
+      } else {
+        showFloatingToast("Incorrect access password. Try 'admin123'.", "error");
+      }
+    };
+
+    window.logOut = function() {
+      activeStudent = null;
+      selectedSubmissionId = null;
+      switchScreen('screen-welcome');
+    };
+
+    // Timer Implementation
+    function startTimer() {
+      clearInterval(examTimerInterval);
+      examTimerInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(examTimerInterval);
+          submitStudentExam();
+        } else {
+          const minutes = Math.floor(secondsLeft / 60);
+          const secs = secondsLeft % 60;
+          document.getElementById("exam-timer").innerText = 
+            `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          
+          if (secondsLeft < 300) {
+            document.getElementById("exam-timer").parentElement.parentElement.classList.replace("bg-amber-50", "bg-rose-50");
+            document.getElementById("exam-timer").parentElement.parentElement.classList.replace("text-amber-900", "text-rose-900");
+          }
+        }
+      }, 1000);
+    }
+
+    // Exam Submission flow
+    window.confirmSubmitExam = function() {
+      document.getElementById("modal-confirm").classList.remove("hidden");
+    };
+
+    window.closeConfirmModal = function() {
+      document.getElementById("modal-confirm").classList.add("hidden");
+    };
+
+    window.submitStudentExam = async function() {
+      closeConfirmModal();
+      clearInterval(examTimerInterval);
+
+      // Format answers package
+      const payload = {
+        studentId: activeStudent.id,
+        name: activeStudent.name,
+        adm: activeStudent.adm,
+        timestamp: Date.now(),
+        answers: studentAnswers,
+        isGraded: false,
+        grades: {},
+        totalScore: 0,
+        generalFeedback: ""
+      };
+
+      if (databaseActive && currentUser) {
+        try {
+          const subDoc = doc(db, 'artifacts', appId, 'public', 'data', 'submissions', activeStudent.id);
+          await setDoc(subDoc, payload);
+        } catch (err) {
+          console.error("Failed to submit online, saving locally as backup:", err);
+          saveSubmissionToLocalStorage(payload);
+        }
+      } else {
+        saveSubmissionToLocalStorage(payload);
+      }
+
+      // Show Success screen
+      document.getElementById("success-name").innerText = activeStudent.name;
+      document.getElementById("success-adm").innerText = activeStudent.adm;
+      document.getElementById("success-hash").innerText = `SUB-${activeStudent.id.substring(activeStudent.id.length - 8).toUpperCase()}`;
+      switchScreen('screen-success');
+    };
+
+    function saveSubmissionToLocalStorage(payload) {
+      const saved = localStorage.getItem("local_submissions");
+      let list = saved ? JSON.parse(saved) : [];
+      list.push(payload);
+      localStorage.setItem("local_submissions", JSON.stringify(list));
+      allSubmissions = list;
+      rebuildMetrics();
+      rebuildSubmissionsList();
+    }
+
+    // ----------------------------------------------------
+    // REAL-TIME DASHBOARD LISTENERS (TEACHER VIEW)
+    // ----------------------------------------------------
+    function bindSubmissionsListener() {
+      if (!databaseActive || !currentUser) return;
+
+      const collRef = collection(db, 'artifacts', appId, 'public', 'data', 'submissions');
+      onSnapshot(collRef, (snapshot) => {
+        allSubmissions = [];
+        snapshot.forEach((doc) => {
+          allSubmissions.push(doc.data());
+        });
+        
+        allSubmissions.sort((a, b) => b.timestamp - a.timestamp);
+        
+        rebuildMetrics();
+        rebuildSubmissionsList();
+      }, (error) => {
+        console.error("Firestore read error: ", error);
+      });
+    }
+
+    function rebuildMetrics() {
+      document.getElementById("stat-total").innerText = allSubmissions.length;
+      
+      const graded = allSubmissions.filter(s => s.isGraded);
+      document.getElementById("stat-pending").innerText = allSubmissions.length - graded.length;
+
+      if (graded.length > 0) {
+        const totalSum = graded.reduce((sum, s) => sum + (s.totalScore || 0), 0);
+        const avg = totalSum / graded.length;
+        document.getElementById("stat-average").innerText = `${avg.toFixed(1)} / 34`;
+
+        const max = Math.max(...graded.map(s => s.totalScore || 0));
+        document.getElementById("stat-highest").innerText = `${max} / 34`;
+      } else {
+        document.getElementById("stat-average").innerText = "0.0 / 34";
+        document.getElementById("stat-highest").innerText = "0 / 34";
+      }
+    }
+
+    function rebuildSubmissionsList() {
+      const container = document.getElementById("submissions-list");
+      container.innerHTML = "";
+
+      if (allSubmissions.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-400">
+            <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+            <p class="text-xs">No papers submitted yet.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      document.getElementById("submission-count").innerText = `${allSubmissions.length} papers loaded`;
+
+      allSubmissions.forEach(sub => {
+        const isSelected = selectedSubmissionId === sub.studentId;
+        const div = document.createElement("button");
+        div.onclick = () => selectStudentPaper(sub.studentId);
+        div.className = `w-full p-4 flex items-center justify-between text-left transition-all border-b border-slate-100 ${isSelected ? 'bg-indigo-50/70 border-l-4 border-l-indigo-600' : 'hover:bg-slate-50'}`;
+        
+        const scoreBadge = sub.isGraded 
+          ? `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">${sub.totalScore} / 34</span>`
+          : `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100">Pending</span>`;
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <p class="font-bold text-slate-800 text-sm">${sub.name}</p>
+            <p class="text-xs text-slate-500">ADM: ${sub.adm} • ${new Date(sub.timestamp).toLocaleTimeString()}</p>
+          </div>
+          ${scoreBadge}
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // GRADING ENGINE LOGIC (AI + MANUAL)
+    // ----------------------------------------------------
+    window.selectStudentPaper = function(id) {
+      selectedSubmissionId = id;
+      rebuildSubmissionsList();
+
+      const sub = allSubmissions.find(s => s.studentId === id);
+      if (!sub) return;
+
+      document.getElementById("grading-pane-empty").classList.add("hidden");
+      document.getElementById("grading-pane-active").classList.add("flex");
+      document.getElementById("grading-pane-active").classList.remove("hidden");
+
+      document.getElementById("active-student-title").innerText = sub.name;
+      document.getElementById("active-student-meta").innerText = `ADM: ${sub.adm} | Submitted: ${new Date(sub.timestamp).toLocaleString()}`;
+
+      renderGradingQuestions(sub);
+    };
+
+    function renderGradingQuestions(sub) {
+      const container = document.getElementById("grading-questions-list");
+      container.innerHTML = "";
+
+      examQuestions.forEach(q => {
+        const studentAns = sub.answers[q.id] || "No answer provided.";
+        const score = sub.grades[q.id]?.score || 0;
+        const feedback = sub.grades[q.id]?.feedback || "";
+
+        const qDiv = document.createElement("div");
+        qDiv.className = "space-y-3 bg-slate-50/50 p-5 rounded-xl border border-slate-200/80";
+        qDiv.innerHTML = `
+          <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span class="text-xs font-bold text-slate-500 uppercase">${q.label}</span>
+            <span class="text-xs font-semibold text-slate-600">Max Score: ${q.maxScore}</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-800 bg-white p-2.5 rounded-lg border border-slate-100">Q: ${q.question}</p>
+          <div class="bg-indigo-50/40 p-3 rounded-lg border border-indigo-50">
+            <p class="text-xs font-semibold text-indigo-800 uppercase tracking-wider mb-1">Student's Answer:</p>
+            <p class="text-sm text-slate-700 whitespace-pre-line leading-relaxed">${studentAns}</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-white p-3 rounded-xl border border-slate-200">
+            <div class="md:col-span-1">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Score</label>
+              <input type="number" id="grade-score-${q.id}" max="${q.maxScore}" min="0" value="${score}" class="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:ring-1 focus:ring-violet-500">
+            </div>
+            <div class="md:col-span-3">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">AI/Teacher Feedback Comment</label>
+              <input type="text" id="grade-feedback-${q.id}" value="${feedback}" placeholder="Provide custom corrections..." class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-1 focus:ring-violet-500">
+            </div>
+          </div>
+        `;
+        container.appendChild(qDiv);
+      });
+    }
+
+    async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(`Server returned HTTP status ${response.status}`);
+        }
+        return response;
+      } catch (error) {
+        if (retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return fetchWithBackoff(url, options, retries - 1, delay * 2);
+        }
+        throw error;
+      }
+    }
+
+    window.triggerAIGrading = async function() {
+      const sub = allSubmissions.find(s => s.studentId === selectedSubmissionId);
+      if (!sub) return;
+
+      document.getElementById("ai-loading-overlay").classList.remove("hidden");
+
+      const apiKey = ""; 
+      const prompt = `
+        You are an expert Computer Studies examiner. Grade the student's exam answers against the provided marking scheme.
+        
+        MARKING SCHEME:
+        ${JSON.stringify(examMarkingScheme)}
+
+        STUDENT'S ANSWERS:
+        ${JSON.stringify(sub.answers)}
+
+        For each question, output:
+        1. "score": An integer score (must not exceed max marks for that question)
+        2. "feedback": A short constructive criticism or validation of their answer based on accuracy.
+
+        Provide the output in the requested JSON schema.
+      `;
+
+      try {
+        const response = await fetchWithBackoff(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, 
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                  type: "OBJECT",
+                  properties: {
+                    grades: {
+                      type: "OBJECT",
+                      properties: {
+                        q1_a: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q1_b: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q2_a: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q2_b: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q3: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q4: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q5: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q6: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q7: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] },
+                        q8: { type: "OBJECT", properties: { score: { type: "INTEGER" }, feedback: { type: "STRING" } }, required: ["score", "feedback"] }
+                      },
+                      required: ["q1_a", "q1_b", "q2_a", "q2_b", "q3", "q4", "q5", "q6", "q7", "q8"]
+                    }
+                  },
+                  required: ["grades"]
+                }
+              }
+            })
+          }
+        );
+
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) throw new Error("Empty response from AI engine");
+
+        const parsed = JSON.parse(text);
+        
+        examQuestions.forEach(q => {
+          const res = parsed.grades[q.id];
+          if (res) {
+            document.getElementById(`grade-score-${q.id}`).value = Math.min(res.score, q.maxScore);
+            document.getElementById(`grade-feedback-${q.id}`).value = res.feedback;
+          }
+        });
+
+        showFloatingToast("AI Autograding complete! Click 'Save Grade' to finalize.", "success");
+      } catch (err) {
+        console.error("AI Grading failed:", err);
+        showFloatingToast("AI Grading temporarily unavailable. Please assign scores manually.", "error");
+      } finally {
+        document.getElementById("ai-loading-overlay").classList.add("hidden");
+      }
+    };
+
+    window.saveManualGrades = async function() {
+      const sub = allSubmissions.find(s => s.studentId === selectedSubmissionId);
+      if (!sub) return;
+
+      const gradesPackage = {};
+      let calculatedTotal = 0;
+
+      examQuestions.forEach(q => {
+        const score = parseInt(document.getElementById(`grade-score-${q.id}`).value) || 0;
+        const feedback = document.getElementById(`grade-feedback-${q.id}`).value.trim();
+        
+        const clampedScore = Math.max(0, Math.min(score, q.maxScore));
+        calculatedTotal += clampedScore;
+
+        gradesPackage[q.id] = {
+          score: clampedScore,
+          feedback: feedback
+        };
+      });
+
+      sub.grades = gradesPackage;
+      sub.totalScore = calculatedTotal;
+      sub.isGraded = true;
+
+      if (databaseActive) {
+        try {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'submissions', sub.studentId);
+          await updateDoc(docRef, {
+            grades: gradesPackage,
+            totalScore: calculatedTotal,
+            isGraded: true
+          });
+          showFloatingToast("Grades successfully synced with cloud databases!", "success");
+        } catch (err) {
+          console.error("Database sync failed, saved locally instead:", err);
+          saveGradingToLocalStorage();
+        }
+      } else {
+        saveGradingToLocalStorage();
+      }
+    };
+
+    function saveGradingToLocalStorage() {
+      localStorage.setItem("local_submissions", JSON.stringify(allSubmissions));
+      rebuildMetrics();
+      rebuildSubmissionsList();
+      showFloatingToast("Grade saved locally on your device!", "success");
+    }
+
+    window.exportScoresToCSV = function() {
+      if (allSubmissions.length === 0) {
+        showFloatingToast("No submissions to export.", "error");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Student Name,Admission Number,Submission Time,Graded Status,Total Score /34\n";
+
+      allSubmissions.forEach(sub => {
+        const timeStr = new Date(sub.timestamp).toLocaleString().replace(/,/g, " ");
+        const status = sub.isGraded ? "Graded" : "Pending";
+        const score = sub.isGraded ? sub.totalScore : "N/A";
+        csvContent += `"${sub.name}","${sub.adm}","${timeStr}","${status}","${score}"\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "Grade_10_Storage_Exam_Results.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    function showFloatingToast(message, type = "success") {
+      const container = document.createElement("div");
+      container.className = `fixed bottom-4 right-4 z-50 px-5 py-3 rounded-xl shadow-lg border text-sm font-semibold flex items-center space-x-2 transition-all transform translate-y-2 opacity-0 duration-300`;
+      
+      if (type === "success") {
+        container.classList.add("bg-emerald-50", "border-emerald-200", "text-emerald-800");
+        container.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i><span>${message}</span>`;
+      } else {
+        container.classList.add("bg-rose-50", "border-rose-200", "text-rose-800");
+        container.innerHTML = `<i data-lucide="alert-octagon" class="w-5 h-5 text-rose-600"></i><span>${message}</span>`;
+      }
+
+      document.body.appendChild(container);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        container.classList.remove("translate-y-2", "opacity-0");
+      }, 50);
+
+      setTimeout(() => {
+        container.classList.add("translate-y-2", "opacity-0");
+        setTimeout(() => {
+          document.body.removeChild(container);
+        }, 300);
+      }, 4000);
+    }
+
+  </script>
+</body>
+</html>
